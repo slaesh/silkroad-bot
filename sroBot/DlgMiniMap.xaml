@@ -1,0 +1,26 @@
+﻿<Window x:Class="sroBot.DlgMiniMap"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sroBot"
+        mc:Ignorable="d"
+        Title="DlgMiniMap" Height="800" Width="895">
+    <Grid>
+        <Canvas x:Name="guiCanvas_map" MouseLeftButtonUp="guiCanvas_map_MouseLeftButtonUp" Width="740" Height="740" Margin="0,0,147,29" Background="Gray" MouseRightButtonUp="guiCanvas_map_MouseRightButtonUp" />
+        <Button x:Name="guiBtn_setTrainarea" Content="set trainarea" HorizontalAlignment="Left" Margin="768,63,0,0" VerticalAlignment="Top" Width="109" Click="guiBtn_setTrainarea_Click"/>
+        <TextBox x:Name="guiTextbox_trainradius" HorizontalAlignment="Left" Height="23" Margin="768,35,0,0" TextWrapping="Wrap" Text="80" VerticalAlignment="Top" Width="109" TextAlignment="Right" />
+        <Button x:Name="guiBtn_up" Content="^" HorizontalAlignment="Left" Margin="791,133,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="guiBtn_up_Click"/>
+        <Button x:Name="guiBtn_current" Content="o" HorizontalAlignment="Left" Margin="791,163,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="guiBtn_current_Click"/>
+        <Button x:Name="guiBtn_left" Content="l" HorizontalAlignment="Left" Margin="761,163,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="guiBtn_left_Click"/>
+        <Button x:Name="button_down" Content="V" HorizontalAlignment="Left" Margin="791,193,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="button_down_Click"/>
+        <Button x:Name="button_right" Content=">" HorizontalAlignment="Left" Margin="821,163,0,0" VerticalAlignment="Top" Width="25" Height="25" Click="button_right_Click"/>
+        <Button x:Name="button" Content="record walkscript" HorizontalAlignment="Left" Margin="768,88,0,0" VerticalAlignment="Top" Width="109" Click="button_Click"/>
+        <Button x:Name="guiBtn_hotan" Content="Hotan" HorizontalAlignment="Left" Margin="761,249,0,0" VerticalAlignment="Top" Width="85" Click="guiBtn_hotan_Click"/>
+        <Button x:Name="guiBtn_alex_south" Content="Alex (South)" HorizontalAlignment="Left" Margin="761,274,0,0" VerticalAlignment="Top" Width="85" Click="guiBtn_alex_south_Click" />
+        <TextBox x:Name="guiTextbox_x" HorizontalAlignment="Left" Height="23" Margin="757,487,0,0" TextWrapping="Wrap" Text="x" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="guiTextbox_y" HorizontalAlignment="Left" Height="23" Margin="757,515,0,0" TextWrapping="Wrap" Text="y" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="guiBtn_goToXY" Content="Button" HorizontalAlignment="Left" Margin="757,543,0,0" VerticalAlignment="Top" Width="120" Click="guiBtn_goToXY_Click"/>
+
+    </Grid>
+</Window>

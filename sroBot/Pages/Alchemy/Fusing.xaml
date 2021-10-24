@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="sroBot.Pages.Alchemy.Fusing"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:sroBot.Pages.Alchemy"
+             xmlns:sroBot="clr-namespace:sroBot.SROBot"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+
+        <Label Content="Plus" HorizontalAlignment="Left" Margin="7,161,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="guiTextbox_fusingGoal" Text="{Binding Alchemy.TargetPlus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={sroBot:StringToByteConverter}}" Margin="54,165,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+        <Button x:Name="guiBtn_fuse" Content="fuse" Margin="145,165,0,0" Click="guiBtn_fuse_Click" HorizontalAlignment="Left" Width="79" Height="25" VerticalAlignment="Top" />
+
+        <CheckBox Content="use immortal at level:" IsChecked="{Binding Config.Alchemy.UseImmortal}" HorizontalAlignment="Left" Margin="17,28,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Alchemy.UseImmortalAt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={sroBot:StringToByteConverter}}" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62" Margin="177,24,0,0" />
+
+        <CheckBox Content="use steady at level:" IsChecked="{Binding Config.Alchemy.UseSteady}" HorizontalAlignment="Left" Margin="17,58,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Alchemy.UseSteadyAt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={sroBot:StringToByteConverter}}" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62" Margin="177,54,0,0" />
+
+        <CheckBox Content="use luckypowder at level:" IsChecked="{Binding Config.Alchemy.UseLuckyPowder}" HorizontalAlignment="Left" Margin="17,88,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Alchemy.UseLuckyPowderAt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={sroBot:StringToByteConverter}}" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62" Margin="177,84,0,0" />
+
+        <CheckBox Content="use luckystone at level:" IsChecked="{Binding Config.Alchemy.UseLuckyStone}" HorizontalAlignment="Left" Margin="17,118,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Alchemy.UseLuckyStoneAt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={sroBot:StringToByteConverter}}" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62" Margin="177,114,0,0" />
+
+    </Grid>
+</UserControl>

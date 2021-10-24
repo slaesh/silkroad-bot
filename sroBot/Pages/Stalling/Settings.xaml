@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="sroBot.Pages.Stalling.Settings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:sroBot.Pages.Stalling"
+             xmlns:SROBot="clr-namespace:sroBot.SROBot"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <d:DesignerProperties.DesignStyle>
+        <Style TargetType="UserControl">
+            <Setter Property="Background" Value="White" />
+        </Style>
+    </d:DesignerProperties.DesignStyle>
+    <Grid>
+        <TextBox x:Name="guiTextbox_stallTitle" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Config.Stalling.Title}" VerticalAlignment="Top" Width="283"/>
+        <TextBox x:Name="guiTextbox_stallMsg" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="Wrap" Text="{Binding Config.Stalling.Message}" VerticalAlignment="Top" Width="283"/>
+        <CheckBox Content="re-create after login" IsChecked="{Binding Config.Stalling.ReCreateAfterLogin}" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"/>
+        
+        <Button x:Name="guiBtn_openStall" Content="create" HorizontalAlignment="Left" Margin="298,10,0,0" VerticalAlignment="Top" Width="75" Height="51" Click="guiBtn_openStall_Click"/>
+        <Button x:Name="guiBtn_closeStall" Content="close" HorizontalAlignment="Left" Margin="378,10,0,0" VerticalAlignment="Top" Width="75" Height="51" Click="guiBtn_closeStall_Click"/>
+    </Grid>
+</UserControl>

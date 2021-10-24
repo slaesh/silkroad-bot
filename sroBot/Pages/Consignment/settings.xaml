@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="sroBot.Pages.Consignment.settings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:sroBot.Pages.Consignment"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
+             xmlns:sroBot="clr-namespace:sroBot"
+             xmlns:SROBot="clr-namespace:sroBot.SROBot"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="soxTypes" MethodName="GetValues" ObjectType="{x:Type mscorlib:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="sroBot:SOX_TYPE"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="tIdGroupTypes" MethodName="GetValues" ObjectType="{x:Type mscorlib:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="SROBot:ITEM_GROUP_TYPES"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <Grid>
+        <CheckBox Content="use in loop" IsChecked="{Binding Config.Consignment.UseInLoop}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+
+        <DataGrid Margin="10,37,10,10" ItemsSource="{Binding Config.Consignment.SellConfiguration}" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <mui:DataGridCheckBoxColumn Header="Sell" Binding="{Binding Sell, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                <mui:DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="70" />
+                <mui:DataGridComboBoxColumn Header="TIdGroup" SelectedItemBinding="{Binding TIdGroup}" ItemsSource="{Binding Source={StaticResource tIdGroupTypes}}" Width="190" />
+                <mui:DataGridTextColumn Header="Degree" Binding="{Binding Degree}" Width="50" />
+                <mui:DataGridComboBoxColumn Header="SOX-Type" SelectedItemBinding="{Binding Sox}" ItemsSource="{Binding Source={StaticResource soxTypes}}" Width="80" />
+                <mui:DataGridTextColumn Header="min. quantity" Binding="{Binding MinAmount}" Width="80" />
+                <mui:DataGridTextColumn Header="PricePerPiece" Binding="{Binding PricePerPiece}" Width="110" />
+                <mui:DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="200" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="guiBtn_consignmentCopyRules" Content="copy rules" HorizontalAlignment="Right" Margin="0,17,409,0" VerticalAlignment="Top" Width="75" Click="guiBtn_consignmentCopyRules_Click"/>
+        <Button x:Name="guiBtn_consignmentImportRules" Content="import rules" HorizontalAlignment="Right" Margin="0,17,322,0" VerticalAlignment="Top" Width="75" Click="guiBtn_consignmentImportRules_Click"/>
+    </Grid>
+</UserControl>

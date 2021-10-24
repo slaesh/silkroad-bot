@@ -1,0 +1,107 @@
+﻿<Window x:Class="sroBot.DlgPickfilter"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sroBot"
+        mc:Ignorable="d"
+        Title="DlgPickfilter" Height="544" Width="899">
+    <Grid>
+        <ListView x:Name="guiListview_items" Margin="10,140,10,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="250">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Iteminfo.Name}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Degree" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Iteminfo.Degree}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Level" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Iteminfo.Level}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Pick" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="pickInfo_Pick" IsChecked="{Binding Pickinfos.Pick, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Click="pickInfo_Pick_Click" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="while Amount &lt; x" Width="110">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Width="90" Name="pickInfo_PickIfSmallerThan" Text="{Binding Pickinfos.PickIfSmallerThan, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={local:PickIfSmallerThanConverter}}" TextChanged="pickInfo_PickIfSmallerThan_TextChanged" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="to Inventory" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="pickInfo_ToInventory" IsChecked="{Binding Pickinfos.MoveFromPetToInventory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Click="pickInfo_ToInventory_Click" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Sell" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="pickInfo_Sell" IsChecked="{Binding Pickinfos.Sell, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Click="pickInfo_Sell_Click" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Storage" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="pickInfo_Storage" IsChecked="{Binding Pickinfos.Storage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Click="pickInfo_Storage_Click" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="GuildStorage" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="pickInfo_GuildStorage" IsChecked="{Binding Pickinfos.GuildStorage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Click="pickInfo_GuildStorage_Click" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBox x:Name="guiTextbox_search" HorizontalAlignment="Left" Height="23" Margin="88,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="314" TextChanged="filterChanged" />
+        <Button x:Name="guiBtn_save" Content="save" HorizontalAlignment="Left" Margin="806,10,0,0" VerticalAlignment="Top" Width="75" Click="guiBtn_save_Click"/>
+        <TextBox x:Name="guiTextbox_degreeStart" HorizontalAlignment="Left" Height="23" Margin="88,38,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="38" TextChanged="filterChanged"/>
+        <Label Content="->" HorizontalAlignment="Left" Margin="129,36,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="guiTextbox_degreeEnd" HorizontalAlignment="Left" Height="23" Margin="155,38,0,0" TextWrapping="Wrap" Text="13" VerticalAlignment="Top" Width="38" TextChanged="filterChanged"/>
+        <TextBox x:Name="guiTextbox_lvlStart" HorizontalAlignment="Left" Height="23" Margin="88,70,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="38" TextChanged="filterChanged"/>
+        <Label Content="-&gt;" HorizontalAlignment="Left" Margin="129,68,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="guiTextbox_lvlEnd" HorizontalAlignment="Left" Height="23" Margin="155,70,0,0" TextWrapping="Wrap" Text="130" VerticalAlignment="Top" Width="38" TextChanged="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_isRare" Content="Rare" HorizontalAlignment="Left" Margin="19,109,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_isChn" Content="Chinese" HorizontalAlignment="Left" Margin="81,109,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_isEu" Content="European" HorizontalAlignment="Left" Margin="168,109,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_isWeapon" Content="Weapon" HorizontalAlignment="Left" Margin="264,109,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_isShield" Content="Shield" HorizontalAlignment="Left" Margin="353,109,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_isArmor" Content="Armor" HorizontalAlignment="Left" Margin="428,109,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_isAccessory" Content="Accessory" HorizontalAlignment="Left" Margin="503,109,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_useDegree" Content="Degree" HorizontalAlignment="Left" Margin="19,41,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <CheckBox x:Name="guiCheckbox_useLevel" Content="Level" HorizontalAlignment="Left" Margin="19,73,0,0" VerticalAlignment="Top" Click="filterChanged"/>
+        <Label x:Name="label" Content="Search" HorizontalAlignment="Left" Margin="32,7,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

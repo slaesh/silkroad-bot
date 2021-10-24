@@ -1,0 +1,795 @@
+﻿<Window x:Class="sroBot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:sroBot"
+        xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
+        xmlns:SROServer="clr-namespace:sroBot.SROServer"
+        xmlns:SROBot="clr-namespace:sroBot.SROBot"
+        xmlns:sroBot="clr-namespace:sroBot"
+        xmlns:spawns="clr-namespace:sroBot.SROBot.Spawn"
+        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        
+        SnapsToDevicePixels="True"
+        
+        Title="MainWindow" Height="631" Width="1528.935" FontFamily="Calibri Light" FontSize="14">
+
+
+    <Window.Resources>
+        <ObjectDataProvider x:Key="soxTypes" MethodName="GetValues" ObjectType="{x:Type mscorlib:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="sroBot:SOX_TYPE"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="tIdGroupTypes" MethodName="GetValues" ObjectType="{x:Type mscorlib:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="SROBot:ITEM_GROUP_TYPES"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+
+    <TabControl x:Name="tabControl" Margin="0,0,2,0" SelectedIndex="1">
+        <TabItem Header="TabItem">
+            <Grid>
+                <Button Content="pick filter" HorizontalAlignment="Left" Margin="1163,35,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+                <ListBox Visibility="Collapsed" x:Name="guiListbox_items" HorizontalAlignment="Left" Margin="10,51,0,10" Width="140" SelectionMode="Single" MouseDoubleClick="guiListbox_items_MouseDoubleClick"  >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Distance}" />
+                                <TextBlock Text=" - " />
+                                <TextBlock Text="{Binding Iteminfo.Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button x:Name="guiBtn_parsePk2" Content="parse pk2" HorizontalAlignment="Left" Margin="1150,145,0,0" VerticalAlignment="Top" Width="75" Click="guiBtn_parsePk2_Click"/>
+                <Label Visibility="Collapsed" x:Name="labelitems" Content="items" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top"/>
+                <Label Visibility="Collapsed" x:Name="labelmobs" Content="mobs" HorizontalAlignment="Left" Margin="155,28,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="labelskills" Content="skills" HorizontalAlignment="Left" Margin="490,28,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="labelattackskills" Content="attack skills" HorizontalAlignment="Left" Margin="722,28,0,0" VerticalAlignment="Top" />
+                <CheckBox x:Name="guiCheckbx_logPackets" Content="log packets" HorizontalAlignment="Left" Margin="1145,112,0,0" VerticalAlignment="Top" Click="guiCheckbx_logPackets_Click" />
+                <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="859,6,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="54"/>
+                <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="918,6,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="37"/>
+                <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="23" Margin="960,6,0,0" TextWrapping="Wrap" Text="250" VerticalAlignment="Top" Width="46"/>
+                <Button x:Name="button" Content="port" HorizontalAlignment="Left" Margin="1011,6,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+                <Button x:Name="guiBtn_setDesignatePoint" Content="designate" HorizontalAlignment="Left" Margin="1011,31,0,0" VerticalAlignment="Top" Width="75" Click="guiBtn_setDesignatePoint_Click"/>
+                <Button x:Name="button1" Content="list portals" HorizontalAlignment="Left" Margin="1091,6,0,0" VerticalAlignment="Top" Width="75" Click="button1_Click"/>
+                <Button x:Name="button2" Content="groupspawn" HorizontalAlignment="Left" Margin="1163,62,0,0" VerticalAlignment="Top" Width="75" Click="button2_Click"/>
+                <Button x:Name="button8" Content="char spawn" HorizontalAlignment="Left" Margin="1163,87,0,0" VerticalAlignment="Top" Width="75" Click="button8_Click"/>
+                <Button x:Name="button4" Content="packet counts" HorizontalAlignment="Left" Margin="106,62,0,0" VerticalAlignment="Top" Width="161" Click="button4_Click"/>
+
+            </Grid>
+        </TabItem>
+        <TabItem Header="TabItem">
+            <Grid Background="#FFE5E5E5">
+                <Grid.Resources>
+
+                    <!-- Toggle Button -->
+                    <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Grid Width="15" Height="13" SnapsToDevicePixels="True">
+                                        <!-- Rectangle 9x9 pixels -->
+                                        <Rectangle Width="9" Height="9" Stroke="#919191" SnapsToDevicePixels="true">
+                                            <Rectangle.Fill>
+                                                <LinearGradientBrush EndPoint="0.5,2" StartPoint="0.5,0">
+                                                    <GradientStop Color="White" Offset="0"/>
+                                                    <GradientStop Color="Silver" Offset="0.5"/>
+                                                    <GradientStop Color="LightGray" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <!-- Vertical line inside rectangle -->
+                                        <Rectangle x:Name="ExpandPath" Width="1" Height="5" Stroke="Black" SnapsToDevicePixels="true"/>
+                                        <!-- Horizontal line inside rectangle -->
+                                        <Rectangle Width="5" Height="1" Stroke="Black" SnapsToDevicePixels="true"/>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Visibility"  TargetName="ExpandPath" Value="Collapsed"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <local:TreeViewLineConverter x:Key="LineConverter"/>
+
+                    <!-- TreeViewItem -->
+                    <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Padding" Value="1,0,0,0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Connecting Lines -->
+                                        <Rectangle x:Name="HorLn" Margin="9,1,0,0" Height="1" Stroke="#DCDCDC" SnapsToDevicePixels="True"/>
+                                        <Rectangle x:Name="VerLn" Width="1" Stroke="#DCDCDC" Margin="0,0,1,0" Grid.RowSpan="2" SnapsToDevicePixels="true" Fill="White"/>
+                                        <ToggleButton Margin="-1,0,0,0" x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyle}" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
+                                        <Border Name="Bd" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                                            <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" MinWidth="20"/>
+                                        </Border>
+                                        <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+
+                                        <!-- This trigger changes the connecting lines if the item is the last in the list -->
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource LineConverter}}" Value="true">
+                                            <Setter TargetName="VerLn" Property="Height" Value="9"/>
+                                            <Setter TargetName="VerLn" Property="VerticalAlignment" Value="Top"/>
+                                        </DataTrigger>
+                                        <Trigger Property="IsExpanded" Value="false">
+                                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+                                        </Trigger>
+                                        <Trigger Property="HasItems" Value="false">
+                                            <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="HasHeader" Value="false"/>
+                                                <Condition Property="Width" Value="Auto"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
+                                        </MultiTrigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="HasHeader" Value="false"/>
+                                                <Condition Property="Height" Value="Auto"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
+                                        </MultiTrigger>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <!--<Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>-->
+                                            <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+                                            <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>-->
+                                            <Setter Property="Foreground" Value="Orange"/>
+                                            <Setter Property="FontFamily" Value="Calibri"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="true"/>
+                                                <Condition Property="IsSelectionActive" Value="false"/>
+                                            </MultiTrigger.Conditions>
+                                            <!--<Setter TargetName="Bd" Property="Background" Value="Green"/>-->
+                                            <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+                                            <!--<Setter Property="Foreground" Value="White"/>-->
+                                            <Setter Property="Foreground" Value="Orange"/>
+                                            <Setter Property="FontFamily" Value="Calibri"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </MultiTrigger>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                </Grid.Resources>
+
+                <TreeView x:Name="guiTreeview_bots" HorizontalAlignment="Left" Width="231" SelectedItemChanged="guiTreeview_bots_SelectedItemChanged" >
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type SROServer:Server}" ItemsSource="{Binding Bots}">
+
+                            <TextBlock Text="{Binding Name}" />
+
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <DataTemplate DataType="{x:Type SROBot:Bot}">
+
+                                    <StackPanel Orientation="Vertical" MinWidth="150" Margin="0,0,0,10">
+
+                                        <TextBlock>
+                                            <Run Text="{Binding CharName}" />
+                                            <Run Text=" (Lvl " />
+                                            <Run Text="{Binding Char.Level}" />
+                                            <Run Text=")" />
+                                        </TextBlock>
+
+                                        <ProgressBar Value="{Binding Char.CurHpPercentage}" Height="9" Maximum="100" Foreground="#FFE41414" />
+                                        <ProgressBar Value="{Binding Char.CurMpPercentage}" Height="9" Maximum="100" Foreground="#FF1041E8" />
+                                        <ProgressBar Value="{Binding Char.EXPPercentage}" Height="9" Maximum="100" Foreground="#FF117C00" />
+
+                                        <TextBlock FontSize="10">
+                                            <Run Text="{Binding Loop.LoopState}" />
+                                            <Run Text="{Binding Loop.TrainState}" />
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                </DataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+                <TabControl Margin="231,0,0,0" SelectedIndex="1">
+                    <TabItem Header="server settings" x:Name="guiTabItemServerSettings">
+                        <Grid>
+
+                            <Button x:Name="guiBtn_serverStartAll" Content="start all" Height="26" Width="84" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="guiBtn_serverStartAll_Click"/>
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Header="bot settings" x:Name="guiTabItemBotSettings">
+                        <Grid>
+                            <!--<ProgressBar x:Name="guiProgressbar_hp" Value="{Binding Char.CurHpPercentage}" HorizontalAlignment="Left" Height="9" VerticalAlignment="Top" Width="171" Maximum="100" Foreground="#FFE41414" Margin="10,10,0,0" />
+                            <ProgressBar x:Name="guiProgressbar_mp" Value="{Binding Char.CurMpPercentage}" HorizontalAlignment="Left" Height="9" VerticalAlignment="Top" Width="171" Maximum="100" Foreground="#FF1041E8" Margin="10,24,0,0" />
+                            <ProgressBar x:Name="guiProgressbar_exp" Value="{Binding Char.EXPPercentage}" HorizontalAlignment="Left" Height="9" VerticalAlignment="Top" Width="171" Maximum="100" Foreground="#FF117C00" Margin="186,10,0,0" />-->
+
+                            <ProgressBar x:Name="guiProgressbar_hpMob" Value="{Binding CurMobHp}" HorizontalAlignment="Left" Height="9" VerticalAlignment="Top" Width="171" Maximum="100" Foreground="#FFE41414" Margin="867,10,0,0" />
+                            <ProgressBar x:Name="guiProgressbar_myDmg" Value="{Binding CurMobDmg}" HorizontalAlignment="Left" Height="9" VerticalAlignment="Top" Width="171" Maximum="100" Foreground="#FFDE0F93" FlowDirection="RightToLeft" Margin="867,24,0,0" />
+
+                            <TextBlock x:Name="lastLoop" TextWrapping="Wrap" Text="{Binding Loop.LastLoop, StringFormat='{}{0:HH:mm:ss.fff}'}" Margin="373,10,0,0" HorizontalAlignment="Left" Width="318" Height="23" VerticalAlignment="Top"/>
+
+                            <TabControl Margin="0,40,0,0">
+
+                                <TabItem Header="status">
+                                    <Grid>
+                                        <TextBlock Margin="497,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding Char.Level, StringFormat='LVL: {0:0}'}" />
+                                        <TextBlock Margin="497,36,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding Char.EXPPercentage, StringFormat='EXP: {0:0.00}%'}" />
+                                        <TextBlock Margin="497,62,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding Char.SP, StringFormat='SP: {0:N0}'}" />
+                                        <TextBlock Margin="497,88,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding Char.Silk, StringFormat='Silk: {0:0}'}" />
+                                        <TextBlock Margin="497,114,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding Char.HighestDmg, StringFormat='HighestDmg: {0:N0}'}" />
+
+                                        <Button Content="start client" Margin="0,0,10,10" Height="30" Name="guiBtnStartClient" Click="guiBtnStartClient_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="74" />
+                                        <Button Content="kill client" Margin="0,0,10,45" Height="30" Name="guiBtn_killClient" Click="guiBtn_killClient_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="74" />
+                                        <Button Content="hide client" Margin="0,0,10,80" Height="30" Name="guiBtn_hideClient" Click="guiBtn_hideClient_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="74" />
+                                        <Button Content="map" Margin="89,13,0,0" Name="guiBtn_minimap" Click="guiBtn_minimap_Click" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" />
+                                        <Button Content="partymaster" Margin="217,96,0,0" Name="guiBtn_partymaster" Click="guiBtn_partymaster_Click" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" />
+                                        <Button Content="merge" Margin="89,165,0,0" Name="guiBtn_mergeItems" Click="guiBtn_mergeItems_Click" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" />
+                                        <Button Content="happy" Margin="89,257,0,0" Name="guiBtn_soOkHappy" Click="guiBtn_soOkHappy_Click" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" />
+                                        <Button Content="storage" Margin="251,217,0,0" Name="guiBtn_storagetest" Click="guiBtn_storagetest_Click" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" />
+                                        <Button Content="search elixirs" Margin="44,84,0,0" Name="guiBtn_incFire" Click="guiBtn_incFire_Click" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="136" />
+                                        <Button Content="destroy consignment" Margin="44,119,0,0" Name="guiBtn_invisible" Click="guiBtn_invisibleClick" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="136" />
+                                        <Button Content="{Binding Loop.IsStarted, Converter={SROBot:GetStartbuttonTextConverter}}" Margin="10,13,0,0" Height="30" Name="guiBtnStartStopBot" Click="guiBtnStartStopBot_Click" HorizontalAlignment="Left" Width="68" VerticalAlignment="Top" />
+                                        <CheckBox IsChecked="{Binding Config.Clientless}" Content="clientless" Margin="0,0,128,17" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="68" />
+                                        <CheckBox IsChecked="{Binding Config.AutoReconnect}" Content="auto reconnect" Margin="0,0,89,123" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="107" />
+                                        <Button x:Name="guiBtn_destroyProxy" Content="destroy proxy" Margin="0,0,10,115" Click="guiBtn_destroyProxy_Click" HorizontalAlignment="Right" Width="74" Height="32" VerticalAlignment="Bottom"/>
+
+                                        <Button x:Name="button3" Content="loop status" Height="30" Width="78" Margin="336,13,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="button3_Click"/>
+                                        <Button x:Name="button5" Content="reset return scroll" Height="30" Width="78" Margin="336,58,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="button5_Click"/>
+
+                                        <CheckBox Content="auto start" IsChecked="{Binding Config.AutoStart}" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
+                                        <TextBox HorizontalAlignment="Left" Height="23" Margin="818,13,0,0" TextWrapping="Wrap" Text="{Binding Config.AccountName}" VerticalAlignment="Top" Width="120"/>
+                                        <TextBox HorizontalAlignment="Left" Height="23" Margin="818,42,0,0" TextWrapping="Wrap" Text="{Binding Config.AccountPass}" VerticalAlignment="Top" Width="120"/>
+
+                                        <ListBox Margin="943,13,0,165" ItemsSource="{Binding ConnectionTimes}" HorizontalContentAlignment="Stretch" HorizontalAlignment="Left" Width="278">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock>
+                                                        <Run Text="{Binding Time, StringFormat='{}{0:HH:mm:ss}'}" />
+                                                        <Run Text=": " />
+                                                        <Run Text="{Binding Type}" />
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="training">
+                                    <Grid>
+                                        <DataGrid Margin="10,10,0,10" ItemsSource="{Binding Config.Training.MobPreferences}" AutoGenerateColumns="False" HorizontalAlignment="Left" Width="336" >
+                                            <DataGrid.Columns>
+                                                <mui:DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}" Width="200" />
+                                                <mui:DataGridTextColumn Header="Preference" Binding="{Binding Preference}" Width="100" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+
+                                        <CheckBox Content="Use Zerk immediately" IsChecked="{Binding Config.Training.UseZerkImmediatly}" Width="151" HorizontalAlignment="Left" Margin="362,10,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="Use Zerk at Giant" IsChecked="{Binding Config.Training.UseZerkAtGiant}" Width="151" HorizontalAlignment="Left" Margin="362,30,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="Use Zerk at Pt-Mob" IsChecked="{Binding Config.Training.UseZerkAtPtMob}" Width="151" HorizontalAlignment="Left" Margin="362,50,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="Use Zerk at Pt-Champ" IsChecked="{Binding Config.Training.UseZerkAtPtChamp}" Width="151" HorizontalAlignment="Left" Margin="362,70,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="Use Zerk at Pt-Giant" IsChecked="{Binding Config.Training.UseZerkAtPtGiant}" Width="151" HorizontalAlignment="Left" Margin="362,90,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="Use Zerk when attacked by >=" IsChecked="{Binding Config.Training.UseZerkWhenAttackedBy}" Width="189" HorizontalAlignment="Left" Margin="362,110,0,0" VerticalAlignment="Top" />
+                                        <TextBox HorizontalAlignment="Left" Height="23" Margin="387,130,0,0" TextWrapping="Wrap" Text="{Binding Config.Training.ZerkWhenAttackedByNoOfMobs, Converter={SROBot:StringToUint32Converter}}" VerticalAlignment="Top" Width="32"/>
+                                        <Label Content="mobs" HorizontalAlignment="Left" Margin="420,127,0,0" VerticalAlignment="Top"/>
+
+                                        <CheckBox Content="equip picked items" IsChecked="{Binding Config.Training.EquipPickedItems}" Width="151" HorizontalAlignment="Left" Margin="362,212,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="mix protector and armor" IsChecked="{Binding Config.Training.MixProtectorAndArmor}" Width="174" HorizontalAlignment="Left" Margin="362,232,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="use any type of weapon" IsChecked="{Binding Config.Training.UseAnyTypeOfWeapon}" Width="174" HorizontalAlignment="Left" Margin="362,252,0,0" VerticalAlignment="Top" />
+
+                                        <CheckBox Content="use level dependet trainplace" IsChecked="{Binding Config.Training.UseLevelDependentTrainplace}" Width="189" HorizontalAlignment="Left" Margin="362,302,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="use ressurection scroll on dead" IsChecked="{Binding Config.Training.UseResurrectionScroll}" Width="200" HorizontalAlignment="Left" Margin="362,322,0,0" VerticalAlignment="Top" />
+                                        <CheckBox Content="back town when dead" IsChecked="{Binding Config.Training.BackTownWhenDead}" Width="189" HorizontalAlignment="Left" Margin="362,342,0,0" VerticalAlignment="Top" />
+
+                                        <CheckBox Content="stop bot on trainplace" IsChecked="{Binding Config.Training.StopBotOnTrainplace}" Width="189" HorizontalAlignment="Left" Margin="362,383,0,0" VerticalAlignment="Top" />
+                                        <Button x:Name="guiBtn_trainingChooseTrainplace" Content="Button" HorizontalAlignment="Left" Margin="825,10,0,0" VerticalAlignment="Top" Width="75" Click="guiBtn_trainingChooseTrainplace_Click" />
+                                        <Label Content="{Binding Config.TrainPlace.WalkingScript}" HorizontalAlignment="Left" Margin="655,7,0,0" VerticalAlignment="Top" Width="165" Height="25" />
+
+                                        <Grid Margin="810,202,0,0" HorizontalAlignment="Left" Width="227" Height="84" VerticalAlignment="Top">
+                                            <CheckBox Content="use hp pots" IsChecked="{Binding Config.Protection.UseHpPots}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                            <CheckBox Content="use mp pots" IsChecked="{Binding Config.Protection.UseMpPots}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+                                            <CheckBox Content="use universal pills" IsChecked="{Binding Config.Protection.UseUniversalPills}" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
+
+                                            <Label Content="%" HorizontalAlignment="Left" Margin="189,7,0,0" VerticalAlignment="Top"/>
+                                            <TextBox Text="{Binding Config.Protection.UseHpPotsAt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToByteConverter}}" Margin="108,9,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+                                            <Label Content="%" HorizontalAlignment="Left" Margin="189,27,0,0" VerticalAlignment="Top"/>
+                                            <TextBox Text="{Binding Config.Protection.UseMpPotsAt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToByteConverter}}" Margin="108,29,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+                                        </Grid>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="loop">
+                                    <Grid>
+
+                                        <Label Content="{Binding Loop.CurStatistic.Duration, StringFormat='Current loop: {0:N0}'}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="auto" Height="25" />
+
+                                        <mui:ModernTab Layout="List" Margin="0,40,0,0" ListWidth="100" DataContext="{Binding}" SelectedSource="/Pages/Loop/settings.xaml">
+                                            <mui:ModernTab.Links>
+                                                <mui:Link DisplayName="settings" Source="/Pages/Loop/settings.xaml" />
+                                                <mui:Link DisplayName="loops" Source="/Pages/Loop/loops.xaml" />
+                                            </mui:ModernTab.Links>
+                                        </mui:ModernTab>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="skills">
+                                    <Grid>
+                                        <ListBox x:Name="guiListbox_skills"
+                                                 ItemsSource="{Binding Converter={SROBot:GetAvailableSkillsConverter}}"
+                                                 HorizontalAlignment="Left" Margin="272,33,0,10" Width="240" SelectionMode="Single"
+                                                 MouseDoubleClick="guiListbox_skills_MouseDoubleClick"
+                                                 Background="#212021"
+                                                 Foreground="LightGray"
+                                                 >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type sroBot:SkillInfo}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding Icon, Converter={SROBot:GetSkillIconConverter}}" Width="30" Height="30" />
+                                                        <StackPanel Orientation="Vertical">
+                                                            <TextBlock FontWeight="Bold" >
+                                                                <Run Text="{Binding Name, StringFormat={}{0}}"/>
+                                                                <Run Text="{Binding SkillLevel, StringFormat={}{0}}"/>
+                                                            </TextBlock>
+                                                            <TextBlock Text="{Binding NeedsTarget}" FontSize="9.333" />
+                                                            <TextBlock Text="{Binding RequiredMastery1Level}" FontSize="9.333" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <ListBox x:Name="guiListbox_attackingSkills"
+                                                 ItemsSource="{Binding Converter={SROBot:GetAttackingSkillsConverter}}"
+                                                 HorizontalAlignment="Left" Margin="554,33,0,10" Width="240" SelectionMode="Single"
+                                                 MouseDoubleClick="guiListbox_MouseDoubleClick"
+                                                 Background="#212021"
+                                                 Foreground="LightGray"
+                                                 HorizontalContentAlignment="Stretch"
+                                                 >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type sroBot:SkillInfo}">
+                                                    <Border Name="attSkill" Background="#4CFF4848" BorderBrush="#FFFF4848" BorderThickness="1">
+                                                        <StackPanel Orientation="Horizontal" >
+                                                            <Image Source="{Binding Icon, Converter={SROBot:GetSkillIconConverter}}" Width="30" Height="30" />
+                                                            <StackPanel Orientation="Vertical">
+                                                                <TextBlock FontWeight="Bold" >
+                                                                <Run Text="{Binding Name, StringFormat={}{0}}"/>
+                                                                <Run Text="{Binding SkillLevel, StringFormat={}{0}}"/>
+                                                                </TextBlock>
+                                                                <TextBlock Name="cooldown" Text="{Binding CooldownTimer}" FontSize="10" />
+
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=CooldownTimer}" Value="0">
+                                                            <Setter Property="Background" Value="Transparent" TargetName="attSkill"/>
+                                                            <Setter Property="BorderBrush" Value="Transparent" TargetName="attSkill"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <Button x:Name="guiBtn_useAsAttack" Content="att" HorizontalAlignment="Left" Margin="517,33,0,10" Width="32" Click="guiBtn_useAsAttack_Click"/>
+                                        <Button x:Name="guiBtn_useAsBuff" Content="buff" HorizontalAlignment="Left" Margin="235,33,0,10" Width="32" Click="guiBtn_useAsBuff_Click"/>
+                                        <ListBox x:Name="guiListbox_bufSkills"
+                                                 ItemsSource="{Binding Converter={SROBot:GetBuffingSkillsConverter}}"
+                                                 HorizontalAlignment="Left" Margin="10,33,0,10" Width="220" SelectionMode="Single"
+                                                 MouseDoubleClick="guiListbox_bufSkills_MouseDoubleClick"
+                                                 Background="#212021"
+                                                 Foreground="LightGray"
+                                                 HorizontalContentAlignment="Stretch"
+                                                 >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type sroBot:SkillInfo}">
+                                                    <Border Name="buffSkill" Background="#4CFF4848" BorderBrush="#FFFF4848" BorderThickness="1">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Image Source="{Binding Icon, Converter={SROBot:GetSkillIconConverter}}" Width="30" Height="30" />
+                                                            <StackPanel Orientation="Vertical">
+                                                                <TextBlock FontWeight="Bold" >
+                                                                <Run Text="{Binding Name, StringFormat={}{0}}"/>
+                                                                <Run Text="{Binding SkillLevel, StringFormat={}{0}}"/>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding CooldownTimer}" FontSize="10" />
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=CooldownTimer}" Value="0">
+                                                            <Setter Property="Background" Value="Transparent" TargetName="buffSkill"/>
+                                                            <Setter Property="BorderBrush" Value="Transparent" TargetName="buffSkill"/>
+                                                        </DataTrigger>
+
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <ListBox x:Name="guiListbox_activeBuffs"
+                                                 ItemsSource="{Binding Converter={SROBot:GetActiveBuffsConverter}}"
+                                                 HorizontalAlignment="Left" Margin="799,33,0,10" Width="220" SelectionMode="Single"
+                                                 MouseDoubleClick="guiListbox_activeBuffs_MouseDoubleClick"
+                                                 Background="#212021"
+                                                 Foreground="LightGray"
+                                                 >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type sroBot:SkillInfo}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding Icon, Converter={SROBot:GetSkillIconConverter}}" Width="30" Height="30" />
+
+                                                        <TextBlock FontWeight="Bold" >
+                                                            <Run Text="{Binding Name, StringFormat={}{0}}"/>
+                                                            <Run Text="{Binding SkillLevel, StringFormat={}{0}}"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+
+                                        <Label Content="buffing skills" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Calibri" FontSize="14"/>
+                                        <Label Content="all available skills" HorizontalAlignment="Left" Margin="272,7,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Calibri" FontSize="14"/>
+                                        <Label Content="attacking skills" HorizontalAlignment="Left" Margin="554,7,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Calibri" FontSize="14"/>
+                                        <Label Content="active buffs" HorizontalAlignment="Left" Margin="799,7,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Calibri" FontSize="14"/>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="logs">
+                                    <ListBox ItemsSource="{Binding Converter={SROBot:GetLogsConverter}}" />
+                                </TabItem>
+
+                                <TabItem Header="mobs" Visibility="Collapsed">
+                                    <Grid>
+                                        <Button Content="refresh" x:Name="guiBtn_refreshMobs" Click="guiBtn_refreshMobs_Click" Margin="0,0,0,286"/>
+                                        <ListBox x:Name="guiListbox_mobs" Margin="0,52,0,0" />
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="chat">
+                                    <Grid>
+                                        <Button Content="all" x:Name="guiBtn_chatAll" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="54" Margin="10,10,0,0" Click="guiBtn_chatAll_Click"/>
+                                        <Button Content="none" x:Name="guiBtn_chatNone" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="54" Margin="69,10,0,0" Click="guiBtn_chatNone_Click"/>
+
+                                        <CheckBox IsChecked="{Binding Chat.ShowNormal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="normal" x:Name="guiCheckbox_chatNormal" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="143,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowGlobal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="global" x:Name="guiCheckbox_chatGlobal" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="207,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowPrivate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="private" x:Name="guiCheckbox_chatPrivate" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="271,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowNotice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="notice" x:Name="guiCheckbox_chatNotice" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="335,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowParty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="party" x:Name="guiCheckbox_chatParty" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="394,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowGuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="guild" x:Name="guiCheckbox_chatGuild" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="453,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowUnion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="union" x:Name="guiCheckbox_chatUnion" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="512,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowUnique, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="unique" x:Name="guiCheckbox_chatUnique" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="571,16,0,0" />
+                                        <CheckBox IsChecked="{Binding Chat.ShowStall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="stall" x:Name="guiCheckbox_chatStall" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Margin="645,17,0,0" />
+
+                                        <ListBox x:Name="guiListbox_chat" Margin="0,43,0,41" ItemsSource="{Binding Converter={SROBot:GetChatConverter}}" Background="#FF444444" MouseDoubleClick="guiListbox_chat_MouseDoubleClick" >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding ShowText}" Name="chatmsg" Foreground="Black" />
+                                                    </StackPanel>
+
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.GUILD}">
+                                                            <Setter Property="Foreground" Value="#ffb541" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.UNION}">
+                                                            <Setter Property="Foreground" Value="#c2f573" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.GLOBAL}">
+                                                            <Setter Property="Foreground" Value="#ffff00" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.NOTICE}">
+                                                            <Setter Property="Foreground" Value="#ffaec3" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.UNIQUE}">
+                                                            <Setter Property="Foreground" Value="Red" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.PARTY}">
+                                                            <Setter Property="Foreground" Value="#9affd0" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.PRIVATE}">
+                                                            <Setter Property="Foreground" Value="#9ffffe" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.NORMAL}">
+                                                            <Setter Property="Foreground" Value="White" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.STALL}">
+                                                            <Setter Property="Foreground" Value="Black" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+
+                                                        <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static SROBot:Chat+CHAT_TYPE.ERROR}">
+                                                            <Setter Property="Foreground" Value="#FFFF6767" TargetName="chatmsg"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <TextBox x:Name="guiTxtbox_chatMsg" Height="23" Margin="207,0,10,10" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Bottom" KeyDown="guiTxtbox_chatMsg_KeyDown"/>
+                                        <ComboBox x:Name="guiCombobox_chatType" ItemsSource="{Binding Chat.ChatTypes}" IsEditable="True" HorizontalAlignment="Left" Margin="10,0,0,10" Width="192" Height="22" VerticalAlignment="Bottom"/>
+                                        <TextBox x:Name="guiTxtbox_chatMsg_Copy" Height="23" Margin="207,0,10,9" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Bottom" KeyDown="guiTxtbox_chatMsg_KeyDown"/>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="statistic">
+                                    <Grid>
+                                        <TextBlock Text="{Binding Loop.Statistic.Gold, StringFormat={}Gold: {0:N0}}" Margin="10,10,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="174" />
+                                        <TextBlock Text="{Binding Loop.Statistic.Drops, StringFormat={}Drops: {0}}" Margin="10,35,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="174" />
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="alchemy">
+
+                                    <Grid>
+                                        <Label Content="Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="guiTextbox_fusingSlotStart" Text="{Binding Alchemy.StartSlot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToByteConverter}}" Margin="75,11,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+                                        <Label Content="End" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="guiTextbox_fusingSlotEnd" Text="{Binding Alchemy.EndSlot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToByteConverter}}" Margin="75,41,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+                                        <Label Content="min Plus" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="guiTextbox_fusingMinPlus" Text="{Binding Alchemy.MinPlus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToByteConverter}}" Margin="75,71,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+                                        <mui:ModernTab Layout="List" Margin="0,107,0,0" ListWidth="100" DataContext="{Binding}" SelectedSource="/Pages/Alchemy/fusing.xaml">
+                                            <mui:ModernTab.Links>
+                                                <mui:Link DisplayName="fusing" Source="/Pages/Alchemy/fusing.xaml" />
+                                                <mui:Link DisplayName="blues" Source="/Pages/Alchemy/blues.xaml" />
+                                            </mui:ModernTab.Links>
+                                        </mui:ModernTab>
+
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="inventories 'n storages">
+                                    <mui:ModernTab Layout="List" ListWidth="100" DataContext="{Binding}" SelectedSource="/Pages/InventoriesStorages/Inventory.xaml">
+                                        <mui:ModernTab.Links>
+                                            <mui:Link DisplayName="inventory" Source="/Pages/InventoriesStorages/Inventory.xaml" />
+                                            <mui:Link DisplayName="test" Source="/Pages/InventoriesStorages/InventoryTest.xaml" />
+                                            <mui:Link DisplayName="pet" Source="/Pages/InventoriesStorages/PetInventory.xaml" />
+                                            <mui:Link DisplayName="storage" Source="/Pages/InventoriesStorages/Storage.xaml" />
+                                            <mui:Link DisplayName="guild" Source="/Pages/InventoriesStorages/GuildStorage.xaml" />
+                                        </mui:ModernTab.Links>
+                                    </mui:ModernTab>
+                                </TabItem>
+
+                                <TabItem Header="spawns">
+                                    <Grid>
+                                        <TreeView x:Name="guiTreeview_spawns" Margin="0,0,385,0" >
+                                            <TreeView.Resources>
+                                                <DataTemplate DataType="{x:Type SROBot:InventoryItem}" >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Iteminfo.Name}" />
+                                                        <TextBlock Text=" [" Foreground="Blue" />
+                                                        <TextBlock Text="{Binding Iteminfo.Plus}" Foreground="Blue" />
+                                                        <TextBlock Text="]" Foreground="Blue" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+
+                                                <!-- data template for FolderItem instances -->
+                                                <HierarchicalDataTemplate DataType="{x:Type SROBot:TreeviewItemHelper}" ItemsSource="{Binding Items}">
+                                                    <TextBlock Text="{Binding Name}" />
+                                                </HierarchicalDataTemplate>
+
+                                                <HierarchicalDataTemplate DataType="{x:Type spawns:Player}" >
+
+                                                    <!-- bind the different data sources -->
+                                                    <HierarchicalDataTemplate.ItemsSource>
+                                                        <MultiBinding Converter="{SROBot:GetSpawnedPlayerInfosConverter}" ConverterParameter="root[Guild], root[Nick], Items">
+                                                            <Binding Path="Guild" />
+                                                            <Binding Path="Nick" />
+                                                            <Binding Path="Items" />
+                                                        </MultiBinding>
+                                                    </HierarchicalDataTemplate.ItemsSource>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Name}" />
+
+                                                    </StackPanel>
+                                                </HierarchicalDataTemplate>
+                                                <!--
+                                                <DataTemplate DataType="{x:Type local:Mob}" >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Mobinfo.Name}" />
+                                                        <TextBlock Text=" (" />
+                                                        <TextBlock Text="{Binding UID}" />
+                                                        <TextBlock Text=" /" />
+                                                        <TextBlock Text=")" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                                -->
+
+                                                <HierarchicalDataTemplate DataType="{x:Type local:Mob}" >
+
+                                                    <!-- bind the different data sources -->
+                                                    <HierarchicalDataTemplate.ItemsSource>
+                                                        <MultiBinding Converter="{SROBot:GetSpawnedNpcInfosConverter}" ConverterParameter="root[UID], root[Model]">
+                                                            <Binding Path="UID" />
+                                                            <Binding Path="Mobinfo.Model" />
+                                                        </MultiBinding>
+                                                    </HierarchicalDataTemplate.ItemsSource>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Mobinfo.Name}" />
+                                                    </StackPanel>
+                                                </HierarchicalDataTemplate>
+
+                                            </TreeView.Resources>
+
+                                            <TreeViewItem Header="Player" ItemsSource="{Binding Converter={SROBot:GetSpawnedPlayerConverter}}">
+
+                                            </TreeViewItem>
+
+                                            <TreeViewItem Header="NPCs" ItemsSource="{Binding Converter={SROBot:GetSpawnedNPCsConverter}}">
+
+                                            </TreeViewItem>
+                                        </TreeView>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="skilling">
+                                    <mui:ModernTab Layout="List" ListWidth="100" DataContext="{Binding}" SelectedSource="/Pages/Skilling/Masteries.xaml">
+                                        <mui:ModernTab.Links>
+                                            <mui:Link DisplayName="masteries" Source="/Pages/Skilling/Masteries.xaml" />
+                                            <mui:Link DisplayName="skills" Source="/Pages/Skilling/Skills.xaml" />
+                                        </mui:ModernTab.Links>
+                                    </mui:ModernTab>
+                                </TabItem>
+
+                                <TabItem Header="consignment">
+                                    <Grid>
+                                        <mui:ModernTab Layout="List" DataContext="{Binding}" SelectedSource="/Pages/Consignment/registered.xaml">
+                                            <mui:ModernTab.Links>
+                                                <mui:Link DisplayName="registered" Source="/Pages/Consignment/registered.xaml" />
+                                                <mui:Link DisplayName="settings" Source="/Pages/Consignment/settings.xaml" />
+                                            </mui:ModernTab.Links>
+                                        </mui:ModernTab>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="storing">
+                                    <Grid>
+                                        <CheckBox Content="use in loop" IsChecked="{Binding Config.Storage.UseInLoop}" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top"/>
+
+                                        <DataGrid Margin="10,43,322,10" ItemsSource="{Binding Config.Storage.StoringConfiguration}" AutoGenerateColumns="False" >
+                                            <DataGrid.Columns>
+                                                <mui:DataGridCheckBoxColumn Header="Store" Binding="{Binding Store, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                                                <mui:DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="70" />
+                                                <mui:DataGridComboBoxColumn Header="TIdGroup" SelectedItemBinding="{Binding TIdGroup}" ItemsSource="{Binding Source={StaticResource tIdGroupTypes}}" Width="190" />
+                                                <mui:DataGridTextColumn Header="Degree" Binding="{Binding Degree}" Width="50" />
+                                                <mui:DataGridComboBoxColumn Header="SOX-Type" SelectedItemBinding="{Binding Sox}" ItemsSource="{Binding Source={StaticResource soxTypes}}" Width="80" />
+                                                <mui:DataGridTextColumn Header="min. quantity" Binding="{Binding MinAmount}" Width="80" />
+                                                <mui:DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="200" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+
+                                        <Button x:Name="guiBtn_storingCopyRules" Content="copy rules" HorizontalAlignment="Right" Margin="0,17,409,0" VerticalAlignment="Top" Width="75" Click="guiBtn_storingCopyRules_Click"/>
+                                        <Button x:Name="guiBtn_storingImportRules" Content="import rules" HorizontalAlignment="Right" Margin="0,17,322,0" VerticalAlignment="Top" Width="75" Click="guiBtn_storingImportRules_Click"/>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="packets">
+                                    <Grid>
+                                        <CheckBox IsChecked="{Binding Config.PacketLogging.Enable}" Content="enable packet log" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
+                                        <CheckBox IsChecked="{Binding Config.PacketLogging.UseIgnoreList}" Content="use ignore-list" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" />
+                                        <CheckBox IsChecked="{Binding Config.PacketLogging.ShowOnlyFiltered}" Content="show only filtered" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" />
+                                        <CheckBox IsChecked="{Binding Config.PacketLogging.ShowClientToBot}" Content="show C->B" HorizontalAlignment="Left" Margin="10,85,0,0" VerticalAlignment="Top" />
+                                        <CheckBox IsChecked="{Binding Config.PacketLogging.ShowBotToClient}" Content="show B->C" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" />
+                                        <CheckBox IsChecked="{Binding Config.PacketLogging.ShowBotToServer}" Content="show B->S" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" />
+                                        <CheckBox IsChecked="{Binding Config.PacketLogging.ShowServerToBot}" Content="show S->B" HorizontalAlignment="Left" Margin="10,145,0,0" VerticalAlignment="Top" />
+
+                                        <Label Margin="189,0,0,0" Height="34" Content="Filtered" VerticalAlignment="Top" HorizontalAlignment="Left" Width="114" />
+                                        <Label Margin="325,0,0,0" Height="29" Content="Ignore" VerticalAlignment="Top" HorizontalAlignment="Left" Width="114" />
+
+                                        <ListBox x:Name="guiListview_filteredPackets" ItemsSource="{Binding Config.PacketLogging.FilteredPackets}" Margin="189,30,0,42" HorizontalAlignment="Left" Width="114" MouseDoubleClick="guiListview_filteredPackets_MouseDoubleClick" />
+                                        <ListBox x:Name="guiListview_ignorePackets" ItemsSource="{Binding Config.PacketLogging.IgnoredPackets}" Margin="325,29,0,42" HorizontalAlignment="Left" Width="114" MouseDoubleClick="guiListview_ignorePackets_MouseDoubleClick" />
+
+                                        <ListBox x:Name="guiListview_packetLogs" ItemsSource="{Binding Proxy.LoggedPackets}" Margin="444,10,10,42" MouseDoubleClick="guiListview_packetLogs_MouseDoubleClick" />
+
+                                        <Button Margin="0,0,10,7" Content="clear" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="114" Click="Button_Click_2" />
+                                        <Button x:Name="guiBtn_copyPacketLogs" Margin="0,0,129,7" Content="copy" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="114" Click="guiBtn_copyPacketLogs_Click" />
+
+                                        <TextBox x:Name="guiTextox_packetOpcode" HorizontalAlignment="Left" Margin="59,0,0,7" TextWrapping="Wrap" Text="740c" Width="120" Height="23" VerticalAlignment="Bottom"/>
+                                        <Button x:Name="guiBtn_addPacketToIgnore" Content="ignore" HorizontalAlignment="Left" Margin="325,0,0,7" Width="114" Click="guiBtn_addPacketToIgnore_Click" Height="30" VerticalAlignment="Bottom" />
+                                        <Button x:Name="guiBtn_addPacketToFilter" Content="filter" HorizontalAlignment="Left" Margin="189,0,0,7" Width="114" Click="guiBtn_addPacketToFilter_Click" Height="30" VerticalAlignment="Bottom" />
+
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem Header="stall">
+                                    <mui:ModernTab Layout="List" ListWidth="100" DataContext="{Binding}" SelectedSource="/Pages/Stalling/Settings.xaml">
+                                        <mui:ModernTab.Links>
+                                            <mui:Link DisplayName="settings" Source="/Pages/Stalling/Settings.xaml" />
+                                        </mui:ModernTab.Links>
+                                    </mui:ModernTab>
+                                </TabItem>
+
+                                <TabItem Header="exchange">
+                                    <mui:ModernTab Layout="List" ListWidth="100" DataContext="{Binding}" SelectedSource="/Pages/Exchanging/Settings.xaml">
+                                        <mui:ModernTab.Links>
+                                            <mui:Link DisplayName="settings" Source="/Pages/Exchanging/Settings.xaml" />
+                                        </mui:ModernTab.Links>
+                                    </mui:ModernTab>
+                                </TabItem>
+
+                                <TabItem Header="party">
+                                    <Grid>
+
+                                        <Grid.Resources>
+                                            <ObjectDataProvider x:Key="partyTypes" MethodName="GetValues" ObjectType="{x:Type mscorlib:Enum}">
+                                                <ObjectDataProvider.MethodParameters>
+                                                    <x:Type TypeName="SROBot:PARTY_TYPE"/>
+                                                </ObjectDataProvider.MethodParameters>
+                                            </ObjectDataProvider>
+                                        </Grid.Resources>
+
+                                        <TextBox x:Name="guiTextbox_partyMemberName" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="183" />
+                                        <Button x:Name="guiBtn_partyMemberAdd" Content="add" HorizontalAlignment="Left" Margin="198,10,0,0" VerticalAlignment="Top" Width="144" Height="23" Click="guiBtn_partyMemberAdd_Click"/>
+
+                                        <ListBox x:Name="guiListbox_partyMembers" Margin="10,38,0,10" ItemsSource="{Binding Config.Party.Members}" HorizontalAlignment="Left" Width="183" MouseDoubleClick="guiListbox_partyMembers_MouseDoubleClick" ></ListBox>
+                                        <ComboBox HorizontalAlignment="Left" Margin="198,78,0,0" VerticalAlignment="Top" Width="144" ItemsSource="{Binding Source={StaticResource partyTypes}}" SelectedItem="{Binding Config.Party.Type}" />
+                                        <CheckBox Content="accept party invites" IsChecked="{Binding Config.Party.AcceptInvite}" HorizontalAlignment="Left" Margin="198,38,0,0" VerticalAlignment="Top"/>
+                                        <CheckBox Content="accept only from list" IsChecked="{Binding Config.Party.AcceptOnlyFromListedMembers}" HorizontalAlignment="Left" Margin="198,58,0,0" VerticalAlignment="Top"/>
+                                        <ListBox ItemsSource="{Binding Party.Members}" HorizontalAlignment="Right" Margin="0,10,10,10" Width="333" >
+
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <TextBlock Text="{Binding Name}" />
+                                                        <TextBlock Text="{Binding Hp, StringFormat='HP: {0:0}%'}" />
+                                                        <TextBlock Text="{Binding Mp, StringFormat='HP: {0:0}%'}" />
+                                                        <TextBlock Text="{Binding Position, StringFormat='Pos: {0}'}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+
+                                        </ListBox>
+
+                                    </Grid>
+                                </TabItem>
+
+                            </TabControl>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+</Window>
+    

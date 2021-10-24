@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="sroBot.Pages.Loop.settings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:sroBot.Pages.Loop"
+             xmlns:SROBot="clr-namespace:sroBot.SROBot"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="685.169">
+    <d:DesignerProperties.DesignStyle>
+        <Style TargetType="UserControl">
+            <Setter Property="Background" Value="White" />
+        </Style>
+    </d:DesignerProperties.DesignStyle>
+    <Grid>
+        <CheckBox Content="buy better weapon" IsChecked="{Binding Config.Loop.BuyBetterWeapons}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <CheckBox Content="buy better armor parts" IsChecked="{Binding Config.Loop.BuyBetterArmorparts}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+        <CheckBox Content="buy better accessories" IsChecked="{Binding Config.Loop.BuyBetterAccessories}" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
+
+        <CheckBox Content="use reverse return to last dead" IsChecked="{Binding Config.Loop.UseReverseReturnToLastDead}" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top"/>
+
+        <CheckBox Content="increase stat points" IsChecked="{Binding Config.Loop.IncreaseStatPoints}" HorizontalAlignment="Left" Margin="349,10,0,0" VerticalAlignment="Top"/>
+
+        <Label Content="STR" HorizontalAlignment="Left" Margin="342,29,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Loop.StrStatPointsPerLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToByteConverter}}" Margin="385,30,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+        <Label Content="INT" HorizontalAlignment="Left" Margin="342,58,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Loop.IntStatPointsPerLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToByteConverter}}" Margin="385,60,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+        <!-- buying stuff -->
+
+        <CheckBox Content="buy arrows/bolts" IsChecked="{Binding Config.Loop.BuyArrowsBolts}" HorizontalAlignment="Left" Margin="10,158,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Loop.ArrowsBoltsAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={SROBot:StringToUint16Converter}}" Margin="145,154,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+        <CheckBox Content="buy hp pots" IsChecked="{Binding Config.Loop.BuyHpPots}" HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Loop.HpPotsAmount, Converter={SROBot:StringToUint16Converter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="145,184,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+        <CheckBox Content="buy mp pots" IsChecked="{Binding Config.Loop.BuyMpPots}" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Loop.MpPotsAmount, Converter={SROBot:StringToUint16Converter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="145,214,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+        <CheckBox Content="buy return scrolls" IsChecked="{Binding Config.Loop.BuyReturnScrolls}" HorizontalAlignment="Left" Margin="10,248,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Config.Loop.ReturnScrollsAmount, Converter={SROBot:StringToUint16Converter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="145,244,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="76" />
+
+    </Grid>
+</UserControl>

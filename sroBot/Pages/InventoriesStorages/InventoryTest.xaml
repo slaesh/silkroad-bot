@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="sroBot.Pages.InventoriesStorages.InventoryTest"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:sroBot.Pages.InventoriesStorages"
+             xmlns:SROBot="clr-namespace:sroBot.SROBot"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600">
+    <d:DesignerProperties.DesignStyle>
+        <Style TargetType="UserControl">
+            <Setter Property="Background" Value="White" />
+        </Style>
+    </d:DesignerProperties.DesignStyle>
+    <Grid>
+        <Grid Margin="10,10,0,0" HorizontalAlignment="Left" Width="177" Height="334" SnapsToDevicePixels="True" VerticalAlignment="Top">
+            <Grid.Background>
+                <ImageBrush ImageSource="/sroBot;component/Images/inventory_background.png"/>
+            </Grid.Background>
+            <!-- INV BACKGROUND -->
+
+            <StackPanel Margin="17,12,16,20">
+                <ItemsControl x:Name="invTest_page1" ItemsSource="{Binding Converter={SROBot:GetInventoryTestPage1Converter}}" >
+                    <ItemsControl.ItemsPanel>
+                        <!-- specify the panel that is the container for the items -->
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" Height="288" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <!-- specify the template used to render each item -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Iteminfo.Icon, Converter={SROBot:GetItemIconConverter}}"
+                                                               Width="30"
+                                                               Height="30"
+                                                               >
+                                <Image.ToolTip>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Iteminfo.Type}" />
+                                        <TextBlock Text="{Binding Iteminfo.Name}" />
+                                        <Separator />
+                                        <TextBlock Text="{Binding Iteminfo.Level, StringFormat={}Level: {0}}" />
+                                        <TextBlock Text="{Binding Iteminfo.Plus, StringFormat={}Plus: {0}}" />
+                                        <TextBlock Text="{Binding Count, StringFormat={}Quantity: {0}}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="192,10,0,0" HorizontalAlignment="Left" Width="177" Height="334" SnapsToDevicePixels="True" VerticalAlignment="Top">
+            <Grid.Background>
+                <ImageBrush ImageSource="/sroBot;component/Images/inventory_background.png"/>
+            </Grid.Background>
+            <!-- INV BACKGROUND -->
+
+            <StackPanel Margin="17,12,16,20">
+                <ItemsControl x:Name="invTest_page2" ItemsSource="{Binding Converter={SROBot:GetInventoryTestPage2Converter}}" >
+                    <ItemsControl.ItemsPanel>
+                        <!-- specify the panel that is the container for the items -->
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" Height="288" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <!-- specify the template used to render each item -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Iteminfo.Icon, Converter={SROBot:GetItemIconConverter}}"
+                                                               Width="30"
+                                                               Height="30"
+                                                               >
+                                <Image.ToolTip>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Iteminfo.Type}" />
+                                        <TextBlock Text="{Binding Iteminfo.Name}" />
+                                        <Separator />
+                                        <TextBlock Text="{Binding Iteminfo.Level, StringFormat={}Level: {0}}" />
+                                        <TextBlock Text="{Binding Iteminfo.Plus, StringFormat={}Plus: {0}}" />
+                                        <TextBlock Text="{Binding Count, StringFormat={}Quantity: {0}}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="374,10,0,0" HorizontalAlignment="Left" Width="177" Height="334" SnapsToDevicePixels="True" VerticalAlignment="Top">
+            <Grid.Background>
+                <ImageBrush ImageSource="/sroBot;component/Images/inventory_background.png"/>
+            </Grid.Background>
+            <!-- INV BACKGROUND -->
+
+            <StackPanel Margin="17,12,16,20">
+                <ItemsControl x:Name="invTest_page3" ItemsSource="{Binding Converter={SROBot:GetInventoryTestPage3Converter}}" >
+                    <ItemsControl.ItemsPanel>
+                        <!-- specify the panel that is the container for the items -->
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" Height="288" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <!-- specify the template used to render each item -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Iteminfo.Icon, Converter={SROBot:GetItemIconConverter}}"
+                                                               Width="30"
+                                                               Height="30"
+                                                               >
+                                <Image.ToolTip>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Iteminfo.Type}" />
+                                        <TextBlock Text="{Binding Iteminfo.Name}" />
+                                        <Separator />
+                                        <TextBlock Text="{Binding Iteminfo.Level, StringFormat={}Level: {0}}" />
+                                        <TextBlock Text="{Binding Iteminfo.Plus, StringFormat={}Plus: {0}}" />
+                                        <TextBlock Text="{Binding Count, StringFormat={}Quantity: {0}}" />
+                                    </StackPanel>
+                                </Image.ToolTip>
+                            </Image>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</UserControl>

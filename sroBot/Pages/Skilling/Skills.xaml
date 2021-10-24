@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="sroBot.Pages.Skilling.Skills"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:sroBot.Pages.Skilling"
+             xmlns:SROBot="clr-namespace:sroBot.SROBot"
+             xmlns:sroBot="clr-namespace:sroBot"
+             xmlns:skilling="clr-namespace:sroBot.Pages.Skilling"
+             xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance SROBot:Bot, IsDesignTimeCreatable=True}"
+             >
+    <Grid>
+
+        <Grid.Resources>
+            <ObjectDataProvider x:Key="masteryTypes" MethodName="GetValues" ObjectType="{x:Type mscorlib:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="sroBot:MASTERY_TYPES"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </Grid.Resources>
+
+        <CheckBox Content="enable skills" IsChecked="{Binding Config.Skilling.EnableSkills}" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
+        <CheckBox Content="choose skills" IsChecked="{Binding Config.Skilling.AutomaticChooseSkills}" HorizontalAlignment="Left" Margin="165,10,0,0" VerticalAlignment="Top"/>
+
+        <ItemsControl x:Name="guiItemscontrol_skills" Margin="0,68,0,0" >
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type SROBot:SkillGroupModel}">
+                    <StackPanel Orientation="Horizontal" Name="skillGroup" Background="Transparent">
+                        <StackPanel>
+                            <!--<Image Source="{Binding Icon, Converter={SROBot:GetSkillIconConverter}}" />-->
+                            <TextBlock Text="{Binding GroupId}"/>
+                        </StackPanel>
+
+                        <ItemsControl ItemsSource="{Binding Skills}"
+                                      Background="#212021"
+                                      Foreground="LightGray"
+                                      >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type SROBot:SkillGroupSkillModel}">
+                                    <Button x:Name="guiBtn_skill"
+                                            Click="guiBtn_skill_Click"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            BorderThickness="0"
+                                            Foreground="LightGray"
+                                            >
+                                        <Button.ContextMenu>
+                                            <ContextMenu>
+                                                <Label Content="{Binding Name}" FontWeight="Bold" IsEnabled="False" />
+                                                <Separator />
+                                                <MenuItem Header="use as buff" x:Name="skillMenu_useAsBuff" Click="skillMenu_useAsBuff_Click" />
+                                                <MenuItem Header="use as att" x:Name="skillMenu_useAsAttack" Click="skillMenu_useAsAttack_Click" />
+                                                <MenuItem Header="do NOT use as buff" Visibility="Collapsed" x:Name="skillMenu_doNotuseAsBuff" Click="skillMenu_doNotuseAsBuff_Click" />
+                                                <MenuItem Header="do NOT use as att" Visibility="Collapsed" x:Name="skillMenu_doNotuseAsAttack" Click="skillMenu_doNotuseAsAttack_Click" />
+                                                <MenuItem Header="do NOT skill" x:Name="skillMenu_doNotSkill" Click="skillMenu_doNotSkill_Click" />
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+
+                                        <Button.ToolTip>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock FontWeight="Bold" >
+                                                    <Run Text="{Binding Name, StringFormat={}{0}}"/>
+                                                    <Run Text="{Binding CurLevel, StringFormat={}{0}}"/>
+                                                </TextBlock>
+                                                <Separator />
+                                            </StackPanel>
+                                        </Button.ToolTip>
+                                        
+                                        <StackPanel Orientation="Vertical" Margin="8,0,0,0" Width="55" >
+                                            <Image Source="{Binding Icon, Converter={SROBot:GetSkillIconConverter}}" Width="30" Height="30" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding CurLevel}" />
+                                                <TextBlock Text="/" />
+                                                <TextBlock Text="{Binding LevelUpTo}" />
+                                                <TextBlock Text="/" />
+                                                <TextBlock Text="{Binding MaxLevel}" />
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                    </Button>
+
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Path=UseAsBuff}" Value="True">
+                                            <Setter Property="Background" Value="Green" TargetName="guiBtn_skill"/>
+                                            <Setter Property="Visibility" Value="Collapsed" TargetName="skillMenu_useAsBuff"/>
+                                            <Setter Property="Visibility" Value="Visible" TargetName="skillMenu_doNotuseAsBuff"/>
+
+                                            <Setter Property="Visibility" Value="Collapsed" TargetName="skillMenu_useAsAttack"/>
+                                            <Setter Property="Visibility" Value="Collapsed" TargetName="skillMenu_doNotuseAsAttack"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=UseAsAtt}" Value="True">
+                                            <Setter Property="Background" Value="Blue" TargetName="guiBtn_skill"/>
+                                            <Setter Property="Visibility" Value="Collapsed" TargetName="skillMenu_useAsAttack"/>
+                                            <Setter Property="Visibility" Value="Visible" TargetName="skillMenu_doNotuseAsAttack"/>
+
+                                            <Setter Property="Visibility" Value="Collapsed" TargetName="skillMenu_useAsBuff"/>
+                                            <Setter Property="Visibility" Value="Collapsed" TargetName="skillMenu_doNotuseAsBuff"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+
+                    <!--<DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=CooldownTimer}" Value="0">
+                            <Setter Property="Background" Value="Green" TargetName="buffSkill"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>-->
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="0,36,0,0" VerticalAlignment="Top" Width="166" ItemsSource="{Binding Source={StaticResource masteryTypes}}" SelectedItem="{Binding CurMastery, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type skilling:Skills}}}" />
+    </Grid>
+</UserControl>
